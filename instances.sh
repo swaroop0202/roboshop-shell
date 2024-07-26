@@ -7,10 +7,16 @@ for name in ${instances[@]};do
 
    if [ $name == "shipping" ]  || [ $name == "mysql" ] 
    then
-        echo "instance shoul be t3.small"
+        instance_type = "t3.medium"
    else
-        echo "instance should be t3.micro"
-   fi   
-done
+        instance_type = "t3.micro"
+   fi  
+  echo "creating instance for $name : instance type is $instance_type" 
+   instance_id=$(aws ec2 run-instances --image-id ami-041e2ea9402c46c32 --instance-type $instance_type  --security-group-ids sg-0cb50d0db2f7c8084 --subnet-id subnet-0d28f9a915b78dd57 --query 'Instances[*].InstanceId' --output text)
 
-aws ec2 run-instances --image-id ami-041e2ea9402c46c32 --count 1 --instance-type t2.micro  --security-group-ids sg-0cb50d0db2f7c8084 --subnet-id subnet-0d28f9a915b78dd57
+   echo "printing public and private ips"
+   aws ec2 run-instances --image-id ami-041e2ea9402c46c32 --instance-type $instance_type  --security-group-ids sg-0cb50d0db2f7c8084 --subnet-id subnet-0d28f9a915b78dd57 --query 'Instances[*].[PrivateIpAddress, PublicIpAddress]' \
+   --output text
+
+   aws ec2 create-tags --resources $instance_id --tags Key=project,Value=$name 
+done
