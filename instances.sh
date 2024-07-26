@@ -5,5 +5,4 @@ instances=("mongodb","redis","mysql","rabbitmq","catalogue","users","cart","ship
 for name in {$instances[@]}
 do 
  echo "creating instances:$name"
- if []
 done
