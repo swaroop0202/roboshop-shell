@@ -38,7 +38,7 @@ for name in ${instances[@]};do
    zoneid=Z02403941EG93JKQ2ZLKQ
    recordname=$name
 
-aws route53 change-resource-record-sets \
+  aws route53 change-resource-record-sets \
   --hosted-zone-id $zoneid \
   --change-batch '
   {
@@ -50,7 +50,7 @@ aws route53 change-resource-record-sets \
         ,"Type"             : "CNAME"
         ,"TTL"              : 120
         ,"ResourceRecords"  : [{
-            "Value"         : "'$ip_to_use'"
+            "Value"         : "' $ip_to_use '"
         }]
       }
     }]
