@@ -26,6 +26,7 @@ for name in ${instances[@]};do
           --output text)
           ip_to_use=$public_ip
      else
+          aws ec2 wait instance-running --instance-ids $instance_id
           private_ip=$(ec2 describe-instances --filters "Name=instance-id,Values=$instance_id" --query 'Reservations[0].Instances[0].[PrivateIpAddress]' --output text)
           ip_to_use=$private_ip
      fi     
