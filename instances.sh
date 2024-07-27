@@ -41,18 +41,18 @@ for name in ${instances[@]};do
   aws route53 change-resource-record-sets \
   --hosted-zone-id $zoneid \
   --change-batch '
-  {
+           {
     "Comment": "Creating a record set for cognito endpoint"
     ,"Changes": [{
       "Action"              : "UPSERT"
       ,"ResourceRecordSet"  : {
-        "Name"              : "'$recordname'.'$domain_name'"
+        "Name"              : "'$name'.'$domain_name'"
         ,"Type"             : "CNAME"
-        ,"TTL"              : 120
+        ,"TTL"              : 1
         ,"ResourceRecords"  : [{
-            "Value"         : "' $ip_to_use '"
+            "Value"         : "'$ip_to_use'"
         }]
       }
     }]
-  }
+  }'
 done
