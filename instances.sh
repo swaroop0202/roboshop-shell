@@ -19,15 +19,14 @@ for name in ${instances[@]};do
    if [ $name == web ]
    then  
           aws ec2 wait instance-running --instance-ids $instance_id
-          public_ip=$(ec2 describe-instances \
+          public_ip=$(aws ec2 describe-instances \
           --filters \
           "Name=instance-id,Values=$instance_id" \
           --query 'Reservations[0].Instances[0].[PublicIpAddress]' \
           --output text)
           ip_to_use=$public_ip
      else
-          aws ec2 wait instance-running --instance-ids $instance_id
-          private_ip=$(ec2 describe-instances --filters "Name=instance-id,Values=$instance_id" --query 'Reservations[0].Instances[0].[PrivateIpAddress]' --output text)
+          private_ip=$(aws ec2 describe-instances --filters "Name=instance-id,Values=$instance_id" --query 'Reservations[0].Instances[0].[PrivateIpAddress]' --output text)
           ip_to_use=$private_ip
      fi     
 
