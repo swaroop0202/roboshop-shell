@@ -12,23 +12,23 @@ for name in ${instances[@]};do
         instance_type="t3.micro"    
    fi  
   echo "creating instance for $name : instance type is $instance_type " 
-   instance_id=$(aws ec2 run-instances --image-id ami-041e2ea9402c46c32 --instance-type $instance_type  --security-group-ids sg-0cb50d0db2f7c8084 --subnet-id subnet-0d28f9a915b78dd57 --query 'Instances[*].InstanceId' --output text)
+   instance_id=$(aws ec2 run-instances --image-id ami-041e2ea9402c46c32 --instance-type $instance_type  --security-group-ids sg-0cb50d0db2f7c8084 --subnet-id subnet-0d28f9a915b78dd57 --query 'Instances[0].InstanceId' --output text)
 
    if [ $name == web ]
    then  
          aws ec2 wait instance-running --instance-ids $instance_id
-         public_ip=ec2 describe-instances \
+         public_ip=$(ec2 describe-instances \
           --filters \
           "Name=instance-id,Values=$instance_id" \
           --query 'Reservations[0].Instances[0].[PublicIpAddress]' \
-          --output text
+          --output text)
           ip_to_use=$public_ip
      else
-          private_ip=ec2 describe-instances \
+          private_ip=$(ec2 describe-instances \
           --filters \
           "Name=instance-id,Values=$instance_id" \
           --query 'Reservations[0].Instances[0].[PrivateIpAddress]' \
-          --output text
+          --output text)
           ip_to_use=$private_ip
      fi     
 
