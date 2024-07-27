@@ -26,7 +26,6 @@ for name in ${instances[@]};do
      else
           private_ip=ec2 describe-instances \
           --filters \
-          "Name=instance-state-name,Values=running" \
           "Name=instance-id,Values=$instance_id" \
           --query 'Reservations[0].Instances[0].[PrivateIpAddress]' \
           --output text
