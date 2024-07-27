@@ -48,7 +48,7 @@ aws route53 change-resource-record-sets \
       ,"ResourceRecordSet"  : {
         "Name"              : "'$recordname'.'$domain_name'"
         ,"Type"             : "CNAME"
-        ,"TTL"              : 1
+        ,"TTL"              : 120
         ,"ResourceRecords"  : [{
             "Value"         : "'$ip_to_use'"
         }]
