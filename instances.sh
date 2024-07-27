@@ -14,10 +14,12 @@ for name in ${instances[@]};do
   echo "creating instance for $name : instance type is $instance_type " 
    instance_id=$(aws ec2 run-instances --image-id ami-041e2ea9402c46c32 --instance-type $instance_type  --security-group-ids sg-0cb50d0db2f7c8084 --subnet-id subnet-0d28f9a915b78dd57 --query 'Instances[0].InstanceId' --output text)
 
+   aws ec2 create-tags --resources $instance_id --tags Key=project,Value=$name 
+
    if [ $name == web ]
    then  
-         aws ec2 wait instance-running --instance-ids $instance_id
-         public_ip=$(ec2 describe-instances \
+          aws ec2 wait instance-running --instance-ids $instance_id
+          public_ip=$(ec2 describe-instances \
           --filters \
           "Name=instance-id,Values=$instance_id" \
           --query 'Reservations[0].Instances[0].[PublicIpAddress]' \
@@ -29,8 +31,6 @@ for name in ${instances[@]};do
           "Name=instance-id,Values=$instance_id" --query 'Reservations[0].Instances[0].[PrivateIpAddress]' --output text)
           ip_to_use=$private_ip
      fi     
-
-   aws ec2 create-tags --resources $instance_id --tags Key=project,Value=$name 
 
    zoneid=Z02403941EG93JKQ2ZLKQ
    recordname=$name
